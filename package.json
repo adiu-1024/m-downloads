@@ -18,10 +18,8 @@
     "URL",
     "blob",
     "fetch",
-    "saveAs",
     "promise",
-    "progress",
-    "authorization"
+    "progress"
   ],
   "author": {
     "name": "adiu",
@@ -30,6 +28,10 @@
   "bugs": {
     "url": "https://github.com/adiu-1024/m-downloads/issues",
     "email": "adiu_1024@163.com"
+  },
+  "registry": {
+    "type": "git",
+    "url": "https://github.com/adiu-1024/m-downloads"
   },
   "files": [
     "package.json",
