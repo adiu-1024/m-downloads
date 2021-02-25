@@ -30,6 +30,7 @@
 * POST request
   ```JS
   const downloader = new Download({
+    authName: 'TOKEN',
     url: '/api/download',
     data: { id: 5, type: 1 },
   })
@@ -55,8 +56,7 @@
 * Other configuration instructions
   ```JS
   {
-    authorization: true,  // Whether token authentication is required. The default value is true
-    tokenName: 'TOKEN'  // Specifies the name of the field where the token is stored locally. The default value is 'TOKEN'
+    authName: 'TOKEN'  // Specifies the name of the field where the token is stored locally. The default value is 'TOKEN'
   }
   ```
 
@@ -76,6 +76,7 @@
 * POST请求
   ```JS
   const downloader = new Download({
+   authName: 'TOKEN',
    url: '/api/download',
    data: { id: 5, type: 1 },
   })
@@ -101,7 +102,6 @@
 * 其它配置说明
   ```JS
   {
-    authorization: true,  // 是否需要 token 鉴权，默认值为 true
-    tokenName: 'TOKEN'  // 指定本地存储 token 的字段名称，默认值为 'TOKEN'
+    authName: 'TOKEN'  // 指定本地存储 token 的字段名称
   }
   ```

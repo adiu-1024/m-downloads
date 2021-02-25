@@ -27,11 +27,9 @@ class Download {
   }
   fetchFile() {
     let {
-      url, method, headers, data, tokenName = 'TOKEN',
-      filename = '', getProgress = null, authorization = true
+      url, method, headers, data, filename = '', authName = null, getProgress = null
     } = this.$options
-    !authorization && delete headers['Authorization']
-    authorization && Object.assign(headers, { 'Authorization': localStorage.getItem(tokenName) })
+    authName && Object.assign(headers, { 'Authorization': localStorage.getItem(authName) })
     return fetch(url, {
       method,
       headers,

@@ -1,6 +1,6 @@
 {
   "name": "m-downloads",
-  "version": "1.4.1",
+  "version": "1.4.3",
   "description": "Blob stream file download of native JS",
   "main": "lib/index.js",
   "scripts": {
@@ -36,7 +36,6 @@
   "files": [
     "package.json",
     "README.md",
-    "lib/download.js",
     "lib/index.js"
   ],
   "license": "MIT",
