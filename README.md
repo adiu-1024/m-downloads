@@ -60,6 +60,35 @@
   }
   ```
 
+* Examples of comprehensive use
+  ```JS
+  import Download from 'm-downloads'
+
+  const BASE = '/api'
+
+  const m = new Map()
+  // Video - export workload
+  m.set('video_workload', '/download/video/workload')
+  // Video - export order
+  m.set('video_order', '/download/video/order')
+  // Video - export material
+  m.set('video_material', '/download/video/material')
+
+  const download = (key, config) => new Download(`${BASE}${m.get(key)}`, config)
+
+  export default download
+  ```
+  ```JS
+  const downloader = download(type, {
+    authName: 'ctoken',
+    data: { id: 5, type: 1 },
+  })
+  downloader
+    .catch(error => { console.log(error) })
+    .finally(() => console.log('成功或失败都进行的操作，如：loading的处理'))
+  ```
+
+
 #### 使用示例
 * GET请求
   ```JS
@@ -104,4 +133,32 @@
   {
     authName: 'TOKEN'  // 指定本地存储 token 的字段名称
   }
+  ```
+
+* 综合使用实例
+  ```JS
+  import Download from 'm-downloads'
+
+  const BASE = '/api'
+
+  const m = new Map()
+  // 视频 - 导出工作量
+  m.set('video_workload', '/download/video/workload')
+  // 视频 - 导出订单
+  m.set('video_order', '/download/video/order')
+  // 视频 - 导出素材
+  m.set('video_material', '/download/video/material')
+
+  const download = (key, config) => new Download(`${BASE}${m.get(key)}`, config)
+
+  export default download
+  ```
+  ```JS
+  const downloader = download(type, {
+    authName: 'ctoken',
+    data: { id: 5, type: 1 },
+  })
+  downloader
+    .catch(error => { console.log(error) })
+    .finally(() => console.log('成功或失败都进行的操作，如：loading的处理'))
   ```
