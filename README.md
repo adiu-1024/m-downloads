@@ -80,7 +80,7 @@
   ```
   ```JS
   const downloader = download(type, {
-    authName: 'ctoken',
+    authName: 'TOKEN',
     data: { id: 5, type: 1 },
   })
   downloader
@@ -155,7 +155,7 @@
   ```
   ```JS
   const downloader = download(type, {
-    authName: 'ctoken',
+    authName: 'TOKEN',
     data: { id: 5, type: 1 },
   })
   downloader
