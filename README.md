@@ -85,7 +85,7 @@
   })
   downloader
     .catch(error => { console.log(error) })
-    .finally(() => console.log('成功或失败都进行的操作，如：loading的处理'))
+    .finally(() => console.log('A successful or failed operation, such as the handling of loading'))
   ```
 
 
