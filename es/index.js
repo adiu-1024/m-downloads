@@ -7,10 +7,10 @@ class Download {
       'Content-Type': 'application/json; charset=utf-8',
     },
   }
-  constructor(config = {}) {
+  constructor(config) {
     const args = Array.from(arguments)
     if (typeof config === 'string') {
-      config = args[1]
+      config = args[1] || {}
       Object.assign(config, { url: args[0] })
     }
     config.data = config.data ? JSON.stringify(config.data) : null
