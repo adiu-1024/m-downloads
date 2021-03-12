@@ -87,4 +87,3 @@
     .catch(error => { console.log(error) })
     .finally(() => console.log('A successful or failed operation, such as the handling of loading'))
   ```
-  
