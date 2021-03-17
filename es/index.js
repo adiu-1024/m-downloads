@@ -1,20 +1,9 @@
 class Download {
-  static DEFAULTS = {
-    method: 'POST',
-    mode: 'cors',
-    credentials: 'same-origin',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8',
-    },
-  }
   constructor(config) {
-    const args = Array.from(arguments)
     if (typeof config === 'string') {
-      config = args[1] || {}
-      Object.assign(config, { url: args[0] })
+      config = Object.assign({}, { url: arguments[0] }, arguments[1])
     }
-    config.data = config.data ? JSON.stringify(config.data) : null
-    this.$options = Object.assign({}, Download.DEFAULTS, config)
+    this.$options = config
     return this.fetchFile()
   }
   async saveAs(data, filename) {
@@ -26,31 +15,28 @@ class Download {
     await URL.revokeObjectURL(el.href)
   }
   fetchFile() {
-    let {
-      url, method, headers, data, filename = '', authName = null, getProgress = null
-    } = this.$options
-    authName && Object.assign(headers, { 'Authorization': localStorage.getItem(authName) })
+    let { url, filename = null, getProgress = null, ...opts } = this.$options
     return fetch(url, {
-      method,
-      headers,
-      body: data,
-    }).then(res => {
-      if (!res.ok) {
-        return Promise.reject({ status: res.status, statusText: res.statusText })
+      mode: 'cors',
+      credentials: 'same-origin',
+      ...opts
+    }).then(response => {
+      if (!response.ok) {
+        return Promise.reject({ status: response.status, statusText: response.statusText })
       } else {
-        filename = filename || decodeURI(res['headers'].get('Content-Disposition').split('filename=')[1])
-        return res
+        filename = filename || decodeURI(response['headers'].get('Content-Disposition').split('filename=')[1])
+        return response
       }
-    }).then(async res => {
+    }).then(async response => {
       if (typeof getProgress !== 'function') {
-        this.saveAs(await res.blob(), filename)
-        return Promise.reject({ status: 200, statusText: 'No need to get download progress'})
+        this.saveAs(await response.blob(), filename)
+        return Promise.reject({ status: 200, statusText: 'No need to get download progress.'})
       } else {
-        const totalSize = res['headers'].get('Content-Length') || 0
+        const totalSize = response['headers'].get('Content-Length') || 0
         if (totalSize === 0) {
-          return Promise.reject({ status: 400, statusText: 'Missing Content-Length field'})
+          return Promise.reject({ status: 400, statusText: 'Missing file size for Content-Length field.'})
         }
-        const reader = res.body.getReader()
+        const reader = response.body.getReader()
         return { totalSize, reader }
       }
     }).then(async ({ totalSize, reader }) => {
