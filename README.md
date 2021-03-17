@@ -9,11 +9,6 @@
   yarn add m-downloads
   ```
 
-* ES6 import mode
-  ```JS
-  import Download from 'm-downloads'
-  ```
-
 #### Use examples
 * GET request
   ```JS
