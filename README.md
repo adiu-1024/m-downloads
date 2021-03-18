@@ -1,4 +1,4 @@
-#### Installation
+#### Installing
 * Using npm
   ```cmd
   npm install m-downloads
