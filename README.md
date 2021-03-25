@@ -23,7 +23,7 @@
         config.body = data ? JSON.stringify(data) : null
         config.headers = Object.assign(headers, {
           'Content-Type': 'application/json; charset=utf-8',
-          'Authorization': localStorage.getItem('AUTH-TOKEN')
+          'Authorization': localStorage.getItem('AUTH-TOKEN'),
         })
         return new target(config)
       }
