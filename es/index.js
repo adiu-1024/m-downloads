@@ -6,13 +6,13 @@ class Download {
     this.$options = config
     return this.fetchFile()
   }
-  async saveAs(data, filename) {
+  saveAs(data, filename) {
     const blob = data instanceof Blob ? data : new Blob(data)
     const el = document.createElement('a')
     el.download = filename
     el.href = URL.createObjectURL(blob)
-    await el.dispatchEvent(new MouseEvent('click'))
-    await URL.revokeObjectURL(el.href)
+    el.dispatchEvent(new MouseEvent('click'))
+    URL.revokeObjectURL(el.href)
   }
   fetchFile() {
     let { url, filename = null, getProgress = null, ...aside } = this.$options
@@ -41,7 +41,7 @@ class Download {
       }
     }).then(async response => {
       if (typeof getProgress !== 'function') {
-        await this.saveAs(await response.blob(), filename)
+        this.saveAs(await response.blob(), filename)
         return Promise.reject({ status: 200, statusText: 'No need to get download progress.'})
       } else {
         const { headers, body: stream } = response
@@ -64,7 +64,7 @@ class Download {
           break
         }
       }
-      await this.saveAs(chunks, filename)
+      this.saveAs(chunks, filename)
     })
   }
 }
