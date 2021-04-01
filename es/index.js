@@ -15,28 +15,41 @@ class Download {
     await URL.revokeObjectURL(el.href)
   }
   fetchFile() {
-    let { url, filename = null, getProgress = null, ...opts } = this.$options
+    let { url, filename = null, getProgress = null, ...aside } = this.$options
     return fetch(url, {
       mode: 'cors',
       credentials: 'same-origin',
-      ...opts
+      ...aside
     }).then(response => {
-      if (!response.ok) {
-        return Promise.reject({ status: response.status, statusText: response.statusText })
+      const { ok, status, statusText } = response
+      if (!ok) {
+        return Promise.reject({ status, statusText })
       } else {
-        filename = filename || decodeURI(response['headers'].get('Content-Disposition').split('filename=')[1])
         return response
       }
     }).then(async response => {
+      try {
+        if (aside.method === 'POST') {
+          const { status, msg } = await response.clone().json()
+          return Promise.reject({ status, statusText: msg })
+        } else {
+          return response
+        }
+      } catch (error) {
+        filename = filename || decodeURI(response['headers'].get('Content-Disposition').split('filename=')[1])
+        return response.clone()
+      }
+    }).then(async response => {
       if (typeof getProgress !== 'function') {
-        this.saveAs(await response.blob(), filename)
+        await this.saveAs(await response.blob(), filename)
         return Promise.reject({ status: 200, statusText: 'No need to get download progress.'})
       } else {
-        const totalSize = response['headers'].get('Content-Length') || 0
+        const { headers, body: stream } = response
+        const totalSize = headers.get('Content-Length') || 0
         if (totalSize === 0) {
           return Promise.reject({ status: 400, statusText: 'Missing file size for Content-Length field.'})
         }
-        const reader = response.body.getReader()
+        const reader = stream.getReader()
         return { totalSize, reader }
       }
     }).then(async ({ totalSize, reader }) => {
@@ -51,7 +64,7 @@ class Download {
           break
         }
       }
-      this.saveAs(chunks, filename)
+      await this.saveAs(chunks, filename)
     })
   }
 }

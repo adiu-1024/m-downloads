@@ -15,22 +15,27 @@
   import Download from 'm-download'
   const handler = {
     construct(target, args) {
+      let [url, config] = args
       if (typeof args[0] === 'string') {
-        args = Object.assign({}, { url: args[0] }, args[1])
+        config.url = url
+      } else {
+        config = args[0] || {}
       }
       if (args.method === 'POST') {
-        const { data = {}, headers = {}, ...config } = args
-        config.body = data ? JSON.stringify(data) : null
-        config.headers = Object.assign(headers, {
+        cconst { data = {}, headers = {}, ...aside } = config
+        aside.body = data ? JSON.stringify(data) : null
+        aside.headers = Object.assign(headers, {
           'Content-Type': 'application/json; charset=utf-8',
-          'Authorization': localStorage.getItem('AUTH-TOKEN'),
+          'Authorization': localStorage.getItem('ctoken'),
         })
+        return new target(aside)
+      } else {
         return new target(config)
       }
     }
   }
   const ProxyDownload = new Proxy(Download, handler)
-  export { Download, ProxyDownload }
+  export default ProxyDownload
   ```
 
 * GET request
