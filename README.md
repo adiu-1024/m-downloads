@@ -12,7 +12,7 @@
 #### Use examples
 * Proxy interception
   ```JS
-  import Download from 'm-download'
+  import Download from 'm-downloads'
   const handler = {
     construct(target, args) {
       let [url, config] = args
@@ -28,10 +28,9 @@
           'Content-Type': 'application/json; charset=utf-8',
           'Authorization': localStorage.getItem('ctoken'),
         })
-        return new target(aside)
-      } else {
-        return new target(config)
+        config = aside
       }
+      return new target(config)
     }
   }
   const ProxyDownload = new Proxy(Download, handler)
@@ -73,29 +72,3 @@
     .finally(() => console.log('A successful or failed operation, such as the handling of loading'))
   ```
   Note: you need to read the Content-Length field of the server response header to get the total size of the downloaded file
-
-* Examples of comprehensive use
-  ```JS
-  const BASE = '/api'
-
-  const m = new Map()
-  // Video - export workload
-  m.set('video_workload', '/download/video/workload')
-  // Video - export order
-  m.set('video_order', '/download/video/order')
-  // Video - export material
-  m.set('video_material', '/download/video/material')
-
-  const download = (key, config) => new ProxyDownload(`${BASE}${m.get(key)}`, config)
-
-  export default download
-  ```
-  ```JS
-  const downloader = download(type, {
-    method: 'POST',
-    data: { id: 5, type: 1 },
-  })
-  downloader
-    .catch(error => { console.log(error) })
-    .finally(() => console.log('A successful or failed operation, such as the handling of loading'))
-  ```
