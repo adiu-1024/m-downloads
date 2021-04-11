@@ -25,7 +25,8 @@ class Download {
       if (!ok) {
         return Promise.reject({ status, statusText })
       } else {
-        filename = filename || decodeURI(headers.get('Content-Disposition').split('filename=')[1])
+        const contentDisposition = headers.get('Content-Disposition')
+        filename = filename || decodeURI(contentDisposition && contentDisposition.split('filename=')[1])
         return response
       }
     }).then(async response => {

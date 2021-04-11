@@ -14,25 +14,19 @@
   ```JS
   import Download from 'm-downloads'
   const handler = {
-    construct(target, args) {
-      let [url, config] = args
-      if (typeof args[0] === 'string') {
-        config.url = url
-      } else {
-        config = args[0] || {}
-      }
-      if (args.method === 'POST') {
-        cconst { data = {}, headers = {}, ...aside } = config
-        aside.body = data ? JSON.stringify(data) : null
-        aside.headers = Object.assign(headers, {
+    construct(target, [url, aside] = args) {
+      aside.url = url
+      if (aside.method === 'POST') {
+        const { data = {}, headers = {}, ...config } = aside
+        config.body = data ? JSON.stringify(data) : null
+        config.headers = Object.assign(headers, {
           'Content-Type': 'application/json; charset=utf-8',
           'Authorization': localStorage.getItem('AUTH-TOKEN'),
         })
-        config = aside
         return new target(config)
       }
-      if (!args.method || args.method === 'GET') {
-        return new target(config)
+      if (!aside.method || aside.method === 'GET') {
+        return new target(aside)
       }
     }
   }
