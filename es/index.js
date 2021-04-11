@@ -1,3 +1,10 @@
+/**
+* Binary stream file download
+*
+* @param {Object} config
+* @return {Promise}
+*/
+
 class Download {
   constructor(config) {
     if (typeof config === 'string') {

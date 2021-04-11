@@ -1,6 +1,6 @@
 {
   "name": "m-downloads",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "Blob stream file download of native JS",
   "main": "lib/index.js",
   "scripts": {

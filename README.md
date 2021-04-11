@@ -13,21 +13,27 @@
 * Proxy interception
   ```JS
   import Download from 'm-downloads'
+
+  const m = new Map()
+  m.set('POST', (url, options) => {
+    const { data = {}, headers = {}, ...config } = options
+    Object.assign(config, {
+      url,
+      body: data ? JSON.stringify(data) : null,
+      headers: {
+        ...headers,
+        'Content-Type': 'application/json; charset=utf-8',
+        'Authorization': localStorage.getItem('AUTH-TOKEN'),
+      },
+    })
+    return config
+  })
+  m.set('GET', (url, options) => ({ url, ...options }))
+
   const handler = {
-    construct(target, [url, aside] = args) {
-      aside.url = url
-      if (aside.method === 'POST') {
-        const { data = {}, headers = {}, ...config } = aside
-        config.body = data ? JSON.stringify(data) : null
-        config.headers = Object.assign(headers, {
-          'Content-Type': 'application/json; charset=utf-8',
-          'Authorization': localStorage.getItem('AUTH-TOKEN'),
-        })
-        return new target(config)
-      }
-      if (!aside.method || aside.method === 'GET') {
-        return new target(aside)
-      }
+    construct(target, [url, options] = args) {
+      const method = options.method ? options.method.toUpperCase() : 'GET'
+      return new target(m.get(method)(url, options))
     }
   }
   const ProxyDownload = new Proxy(Download, handler)
